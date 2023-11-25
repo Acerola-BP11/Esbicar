@@ -65,6 +65,16 @@ async function editUser(req, res, next){
     }
 }
 
+async function deleteUser(req, res, next){
+    const userId = req.params.userId
+    try {
+        await User.findByIdAndDelete(userId)
+        res.status(200).json({msg: 'Usuario deletado com sucesso!'})
+    } catch (error) {
+        res.status(500).json({msg: 'Ocorreu um erro ao deletar o Usuario'})
+    }
+}
+
 module.exports = {
     login,
     sign,

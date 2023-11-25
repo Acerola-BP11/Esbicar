@@ -63,3 +63,17 @@ async function editProduct(req, res, next){
         res.status(500).json({msg: 'Erro ao atualizar o cliente'})
       }
 }
+
+async function deleteProduct(req, res, next){
+    const productId = req.params.productId
+    try {
+        await Product.findByIdAndDelete(productId)
+        res.status(200).json({msg: 'Produto deletado com sucesso!'})
+    } catch (error) {
+        res.status(500).json({msg: 'Ocorreu um erro ao deletar o Produto'})
+    }
+}
+
+module.exports = {
+    getProduct
+}

@@ -1,7 +1,15 @@
 const express = require('express');
-const { updateClient } = require('../controllers/Client');
+const { updateClient, getClient, getClients, deleteClient, createClient } = require('../controllers/Client');
 var router = express.Router();
+const verifyToken = require('../middleware/verifyToken')
 
-router.post('/update/:id', updateClient)
+
+router.use(verifyToken)
+
+router.get('/', getClients)
+router.get('/:clientId', getClient)
+router.post('/update/:clientId', updateClient)
+router.post('/new', createClient)
+router.delete('/:clientId', deleteClient)
 
 module.exports = router

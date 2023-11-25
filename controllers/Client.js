@@ -5,14 +5,15 @@ const Client = require('../models/Client')
 async function createClient(req, res, next){
     const {name, cpf, adress, birthdate} = req.body
     const isNullOrUndefined = dataIsNullOrUndefined([name, 'nome'], [cpf, 'CPF'], [adress, 'endereço'], [birthdate, 'data de nascimeto'])
-    if(!isNullOrUndefined){
+    if(isNullOrUndefined){
         return res.status(200).json(isNullOrUndefined)
     }
     try {
-        await Client.create(name, cpf, adress, birthdate)
+        await Client.create({name, cpf, adress, birthdate})
         res.status(200).json({msg: 'Cliente criado com sucesso!'})
     } catch (err) {
         res.status(500).json({msg: 'Erro criando cliente'})
+        console.error(err)
     }
 }
 
@@ -26,7 +27,7 @@ async function getClient(req, res, next){
             res.status(200).json({msg: 'Cliente não encontrado'})
         }
     } catch (err) {
-        res.status(500).json({msg: 'Não foi possivel criar o cliente'})
+        res.status(500).json({msg: 'Não foi possivel encontrar o cliente'})
     }
 }
 
@@ -57,16 +58,28 @@ async function updateClient(req, res, next){
       });
     
       try {
-        await Client.findByIDAndUpdate(clientID, clientData)
+        await Client.findByIdAndUpdate(clientID, clientData)
         res.status(200).json({msg: 'Cliente atualizado com sucesso!'})
       } catch (error) {
+        console.error(error)
         res.status(500).json({msg: 'Erro ao atualizar o cliente'})
       }
+}
+
+async function deleteClient(req, res, next){
+    const clientId = req.params.clientId
+    try {
+        await Client.findByIdAndDelete(clientId)
+        res.status(200).json({msg: 'Cliente deletado com sucesso!'})
+    } catch (error) {
+        res.status(500).json({msg: 'Ocorreu um erro ao deletar o cliente'})
+    }
 }
 
 module.exports = {
     getClient,
     getClients,
     updateClient,
-    createClient
+    createClient,
+    deleteClient
 }
