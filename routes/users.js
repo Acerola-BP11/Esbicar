@@ -1,5 +1,5 @@
 const express = require('express');
-const { login, sign } = require('../controllers/User');
+const { login, sign, editUser, deleteUser } = require('../controllers/User');
 var router = express.Router();
 const apicache = require('apicache');
 const verifyToken = require('../middleware/verifyToken');
@@ -14,9 +14,8 @@ router.post('/login', login, cache, sign);
 router.use(verifyToken)
 
 // Rotas protegidas
-router.post('/validate', (req, res) => {
-  res.send('Token validado!')
-})
+router.put('/:userId', editUser)
+router.delete('/:userId', deleteUser)
 
 
 module.exports = router

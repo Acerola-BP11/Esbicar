@@ -8,7 +8,7 @@ router.use(verifyToken)
 
 router.get('/', getClients)
 router.get('/:clientId', getClient)
-router.post('/update/:clientId', updateClient)
+router.patch('/update/:clientId', updateClient)
 router.post('/new', createClient)
 router.delete('/:clientId', deleteClient)
 

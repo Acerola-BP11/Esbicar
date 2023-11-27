@@ -3,10 +3,10 @@ const Product = require("../models/Product")
 
 
 async function getProduct(req, res, next){
-    const name = req.params.name
+    const productId = req.params.productId
 
     try {
-        const product = await Product.findOne(name)
+        const product = await Product.findById(productId)
         if(isNil(product)){
             res.status(200).json({msg: 'Produto não encontrado'})
         }else{
@@ -26,11 +26,11 @@ async function getProducts(req, res, next){
     }
 }
 
-async function newProduct(req, res, nexet){
-    const {name, stock, sinopse, imdbRating, ageRatio, studio} = req.body
+async function newProduct(req, res, next){
+    const {name, stock, sinopse, imdbRating, ageRatio, price} = req.body
 
     try {
-        await Product.create(name, stock, sinopse, imdbRating, ageRatio, studio)
+        await Product.create({name, stock, sinopse, imdbRating, ageRatio, price})
         res.status(200).json({msg: 'Produto criado com sucesso!'})
     } catch (error) {
         res.status(500).json({msg: 'Ocorreu um erro ao criar o produto'})
@@ -45,22 +45,22 @@ async function editProduct(req, res, next){
         stock: body.stock,
         sinopse: body.sinopse,
         imdbRating: body.imdbRating,
-        ageRatio: body.imdbRatio,
+        ageRatio: body.ageRatio,
         studio: body.studio
     }
     
-    let clientData = {}
+    let productdata = {}
     Object.entries(treatedBody).forEach(([key, value]) => {
         if (!isNil(value)) {
-          clientData[key] = value;
+          productdata[key] = value;
         }
       });
     
       try {
-        await Client.findByIDAndUpdate(clientID, clientData)
-        res.status(200).json({msg: 'Cliente atualizado com sucesso!'})
+        await Product.findByIdAndUpdate(productId, productdata, {runValidators: true})
+        res.status(200).json({msg: 'produto atualizado com sucesso!'})
       } catch (error) {
-        res.status(500).json({msg: 'Erro ao atualizar o cliente'})
+        res.status(500).json({msg: 'Erro ao atualizar o produto'})
       }
 }
 
@@ -75,5 +75,9 @@ async function deleteProduct(req, res, next){
 }
 
 module.exports = {
-    getProduct
+    getProduct,
+    getProducts,
+    newProduct,
+    editProduct,
+    deleteProduct
 }

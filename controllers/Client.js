@@ -3,13 +3,13 @@ const dataIsNullOrUndefined = require('../util/isNil')
 const Client = require('../models/Client')
 
 async function createClient(req, res, next){
-    const {name, cpf, adress, birthdate} = req.body
-    const isNullOrUndefined = dataIsNullOrUndefined([name, 'nome'], [cpf, 'CPF'], [adress, 'endereço'], [birthdate, 'data de nascimeto'])
+    const {name, cpf, adress, birthDate} = req.body
+    const isNullOrUndefined = dataIsNullOrUndefined([name, 'nome'], [cpf, 'CPF'], [adress, 'endereço'], [birthDate, 'data de nascimeto'])
     if(isNullOrUndefined){
         return res.status(200).json(isNullOrUndefined)
     }
     try {
-        await Client.create({name, cpf, adress, birthdate})
+        await Client.create({name, cpf, adress, birthDate})
         res.status(200).json({msg: 'Cliente criado com sucesso!'})
     } catch (err) {
         res.status(500).json({msg: 'Erro criando cliente'})
@@ -47,7 +47,7 @@ async function updateClient(req, res, next){
         name: body.name,
         cpf: body.cpf,
         adress: body.adress,
-        birthdate: body.birthdate
+        birthDate: body.birthDate
     }
     
     let clientData = {}

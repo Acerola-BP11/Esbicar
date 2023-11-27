@@ -10,13 +10,14 @@ const productSchema = mongoose.Schema({
     },
     stock: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0
     },
     sinopse: String,
-    imdbRating: mongoose.Schema.Types.Decimal128,
+    imdbRating: mongoose.Schema.Types.Number,
     ageRatio: Number,
     studio: String,
-    price: mongoose.Schema.Types.Decimal128
+    price: mongoose.Schema.Types.Number
 
 })
 
