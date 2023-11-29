@@ -8,7 +8,6 @@ async function getSales(req, res, next) {
         const sales = await Sale.find()
         res.status(200).json({ sales })
     } catch (error) {
-        console.error(error)
         res.status(500).json({ msg: 'Ocorreu um erro ao listar os pedidos' })
     }
 }

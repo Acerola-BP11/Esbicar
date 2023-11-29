@@ -25,11 +25,11 @@ async function login(req, res, next){
 
 async function sign(req, res, next){
     const user = req.body.user
-    const userId = user.id
+    const userId = user._id
     const token = jwt.sign({userId}, process.env.SECRET, {
         expiresIn: '5 minutes'
     })
-    res.status(200).cookie('Session', token, {expire: 300 + Date.now()}).json({auth: true, token})
+    res.status(200).cookie('Session', token, {expire: 300 + Date.now()}).json({auth: true, token, uid: user._id})
 }
 
 async function createUser(req, res, next){
@@ -53,26 +53,35 @@ async function editUser(req, res, next){
         return res.status(200).json(isNullOrUndefined)
     }
     try {
-        const user = await User.findOne(email, password)
+        const user = await User.findOne({email, password})
         if(isNil(user)){
             res.status(200).json({msg: 'Usuario ou senha invalidos'})
         }else{
-            await user.update({password})
+            user.password = newPassword
+            await user.save()
             res.status(200).json({msg: 'Usuario atualizado com sucesso!'})
         }
     } catch (error) {
+        console.error(error)
         res.status(500).json({msg: 'Ocorreu um erro ao atualizar o usuario'})
     }
 }
 
 async function deleteUser(req, res, next){
     const userId = req.params.userId
-    try {
-        await User.findByIdAndDelete(userId)
-        res.status(200).json({msg: 'Usuario deletado com sucesso!'})
-    } catch (error) {
-        res.status(500).json({msg: 'Ocorreu um erro ao deletar o Usuario'})
+    const userLoggedIn = req.userId
+    console.log(userLoggedIn, userId)
+    if(userId === userLoggedIn){
+        try {
+            await User.findByIdAndDelete(userId)
+            res.status(200).json({msg: 'Usuario deletado com sucesso!'})
+        } catch (error) {
+            res.status(500).json({msg: 'Ocorreu um erro ao deletar o Usuario'})
+        }
+    }else{
+        res.status(403).json({msg: 'Só é possivel deletar o seu proprio usuario!'})
     }
+    
 }
 
 module.exports = {

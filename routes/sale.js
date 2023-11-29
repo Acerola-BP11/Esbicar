@@ -9,7 +9,7 @@ router.use(verifyToken)
 router.get('/', getSales)
 router.get('/:saleId', getSale)
 router.get('/history/:clientId', getSalesByClient)
-router.patch('/update/:saleId', editSale)
+router.patch('/:saleId', editSale)
 router.post('/new', newSale)
 router.delete('/:saleId', deleteSale)
 

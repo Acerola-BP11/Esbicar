@@ -9,7 +9,7 @@ router.get('/:productId', getProduct)
 
 router.use(verifyToken)
 
-router.patch('/update/:productId', editProduct)
+router.patch('/:productId', editProduct)
 router.post('/new', newProduct)
 router.delete('/:productId', deleteProduct)
 

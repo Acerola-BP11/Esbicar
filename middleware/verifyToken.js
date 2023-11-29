@@ -15,7 +15,7 @@ function verifyToken(req, res, next){
         if(err){
             return res.status(500).json({auth: false, msg: 'Ocorreu um erro ao validar o Login'})
         }
-        req.userId = decoded.id
+        req.userId = decoded.userId
         next()
     })
 }
